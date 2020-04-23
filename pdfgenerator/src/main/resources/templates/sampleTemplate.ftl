@@ -7,7 +7,7 @@
 
   <p>${email} </p>
 
-  <img src="${image}" alt="Smiley face" height="70px" width="100px" />
+  
 
 </body>
 </html>

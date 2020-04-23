@@ -26,9 +26,10 @@ import org.xhtmlrenderer.resource.XMLResource;
 
 import com.shail.pdfgenerator.utils.B64ImgReplacedElementFactory;
 import com.shail.pdfgenerator.utils.FreemarkerUtil;
+import com.shail.pdfgenerator.utils.PdfGenerator;
 
 @Service
-public class GeneratePDFService {
+public class PdfService {
 
 	@Autowired
 	FreemarkerUtil freemarkerUtil;
@@ -49,7 +50,7 @@ public class GeneratePDFService {
 		dataModel.put("image",image);
 		
 		
-		URL fileResource = GeneratePDFService.class.getResource("/templates");
+		URL fileResource = PdfService.class.getResource("/templates");
 		String html = freemarkerUtil.loadFtlHtml(new File(fileResource.getFile()), "simpleForm.ftl", dataModel);
 		
 		System.err.println("HTML: "+html);
@@ -101,4 +102,11 @@ public class GeneratePDFService {
 
 	    return Base64.getEncoder().encodeToString(imageAsBytes);
 	  }
+	
+	public ByteArrayOutputStream createPdf(String baseUrl, String templateToBeUsed, Map<String, Object> dataForTemplate) {
+		
+		ByteArrayOutputStream baos = null;
+		baos = new PdfGenerator().createPdf(dataForTemplate, templateToBeUsed, baseUrl);
+		return baos;
+	}
 }
