@@ -3,6 +3,8 @@ package com.shail.pdfgenerator.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,14 +16,10 @@ public class PdfController {
 	@Autowired
 	GeneratePDFService genPdfService;
 	@GetMapping("/generate")
-	public String pdfController() {
-		try {
-			genPdfService.buildPDfDoc();
-			return "done";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "error";
-		}
+	public ResponseEntity<byte[]> pdfController() throws Exception {
+		
+			byte[] bytes = genPdfService.buildPDfDoc();
+			return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(bytes);
+			
 	}
 }
