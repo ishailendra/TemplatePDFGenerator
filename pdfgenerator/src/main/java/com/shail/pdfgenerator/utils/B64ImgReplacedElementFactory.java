@@ -1,6 +1,12 @@
 package com.shail.pdfgenerator.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.w3c.dom.Element;
 import org.xhtmlrenderer.extend.FSImage;
@@ -46,12 +52,41 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
  
  protected FSImage buildImage(String srcAttr, UserAgentCallback uac) throws IOException, BadElementException {
       FSImage fsImage;
+      System.err.println("SrcAttr: "+srcAttr);
       if (srcAttr.startsWith("data:image/")) {
          String b64encoded = srcAttr.substring(srcAttr.indexOf("base64,") + "base64,".length(), srcAttr.length());
          byte[] decodedBytes = new sun.misc.BASE64Decoder().decodeBuffer(b64encoded);
          fsImage = new ITextFSImage(Image.getInstance(decodedBytes));
       } else {
          fsImage = uac.getImageResource(srcAttr).getImage();
+         if(fsImage == null) {
+        	 try {
+        	 URL url = new URL(srcAttr);
+        	 URLConnection con = url.openConnection();
+        	 
+        	 InputStream inputStream = con.getInputStream();
+             BufferedInputStream reader = new BufferedInputStream(inputStream);
+  
+             BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream("resources/images/image.jpg"));
+  
+             byte[] buffer = new byte[4096];
+             int bytesRead = -1;
+  
+             while ((bytesRead = reader.read(buffer)) != -1) {
+                 writer.write(buffer, 0, bytesRead);
+             }
+  
+             writer.close();
+             reader.close();
+             
+             fsImage = uac.getImageResource("resources/images/image.jpg").getImage();
+             if(fsImage != null) {
+            	 System.err.println("fsImage: "+fsImage.getHeight()+"   "+fsImage.getWidth());
+             }
+        	 }catch(Exception e) {
+        		 e.printStackTrace();
+        	 }
+         }
       }
       return fsImage;
  }
