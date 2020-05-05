@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -62,12 +63,12 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
          if(fsImage == null) {
         	 try {
         	 URL url = new URL(srcAttr);
-        	 URLConnection con = url.openConnection();
-        	 
+        	 HttpURLConnection con = (HttpURLConnection)url.openConnection();
+        	 con.addRequestProperty("User-Agent", "Mozilla/5.0");
         	 InputStream inputStream = con.getInputStream();
              BufferedInputStream reader = new BufferedInputStream(inputStream);
   
-             BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream("resources/images/image.jpg"));
+             BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream("E:/GIT_PROJECTS/pdfGenByOpenPDF/pdfgenerator/src/main/resources/images/image.jpg"));
   
              byte[] buffer = new byte[4096];
              int bytesRead = -1;
@@ -79,7 +80,8 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
              writer.close();
              reader.close();
              
-             fsImage = uac.getImageResource("resources/images/image.jpg").getImage();
+//             fsImage = uac.getImageResource("resources/images/image.jpg").getImage();
+             fsImage = new ITextFSImage(Image.getInstance("E:/GIT_PROJECTS/pdfGenByOpenPDF/pdfgenerator/src/main/resources/images/image.jpg"));
              if(fsImage != null) {
             	 System.err.println("fsImage: "+fsImage.getHeight()+"   "+fsImage.getWidth());
              }

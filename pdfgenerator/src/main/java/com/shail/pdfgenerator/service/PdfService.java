@@ -88,7 +88,9 @@ public class PdfService {
 		System.out.println("gen done");
 		return bytes;
 	}
-	
+	/**
+	 * This method is used to convert image into bas 64 encoding.
+	 */
 	private String convertToBase64(Path path) {
 	    byte[] imageAsBytes = new byte[0];
 	    try {

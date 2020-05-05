@@ -15,7 +15,9 @@ import freemarker.template.TemplateExceptionHandler;
 @Component
 public class FreemarkerUtil {
 
-	
+	/**
+	 * This method is used to load the Html template for the pdf file.
+	 */
 	public String loadFtlHtml(File baseDir, String fileName,Map globalMap){
         if(baseDir == null || !baseDir.isDirectory() || globalMap ==null || fileName == null || "".equals(fileName)){
             throw new IllegalArgumentException("Check directory path");
