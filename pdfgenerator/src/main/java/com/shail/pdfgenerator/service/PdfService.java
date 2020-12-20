@@ -39,19 +39,20 @@ public class PdfService {
 		
 //		String outfilepath = "E:\\LocalProjects\\JavaProjects\\pdfgenerator\\src\\main\\resources\\outputs\\generateddoc.pdf";
 		
-		Path path = Paths.get("E:\\LocalProjects\\JavaProjects\\star.jpg");
+		Path path = Paths.get("src/main/resources/hp.jpg");
 		String image = convertToBase64(path);
 		image = "data:image/jpeg;base64,"+ image;
 		
 		Map<String, Object> dataModel = new HashMap<>();
-		dataModel.put("mobile", "1234567890");
-		dataModel.put("name", "Shail");
-		dataModel.put("email", "shail@mail.com");
+		dataModel.put("title", "HP Inc.");
+		dataModel.put("original_name", "Hewlett-Packard Company");
+		dataModel.put("listing", "New York Stock Exchange");
+		
 		dataModel.put("image",image);
 		
 		
 		URL fileResource = PdfService.class.getResource("/templates");
-		String html = freemarkerUtil.loadFtlHtml(new File(fileResource.getFile()), "simpleForm.ftl", dataModel);
+		String html = freemarkerUtil.loadFtlHtml(new File(fileResource.getFile()), "imagetemplate.ftl", dataModel);
 		
 		System.err.println("HTML: "+html);
 		
@@ -74,10 +75,10 @@ public class PdfService {
 		byte[] bytes = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-		    renderer.createPDF(baos);
-		    bytes = baos.toByteArray();
+		   renderer.createPDF(baos);
+		   bytes = baos.toByteArray();
 		    
-		   FileOutputStream fos = new FileOutputStream(new File("E:\\LocalProjects\\JavaProjects\\pdfgenerator\\src\\main\\resources\\outputs\\generateddoc2.pdf"));
+		   FileOutputStream fos = new FileOutputStream(new File("src/main/resources/output/generateddoc2.pdf"));
 		   fos.write(bytes);
 		   fos.close();
 		}
